@@ -1,7 +1,6 @@
 package com.foodflow.FoodFlow.controller;
 
-import com.foodflow.FoodFlow.database.entity.UserEntity;
-import com.foodflow.FoodFlow.dto.CreateUserRequest;
+import com.foodflow.FoodFlow.dto.RegisterUserRequest;
 import com.foodflow.FoodFlow.dto.UserResponse;
 import com.foodflow.FoodFlow.service.UserService;
 import jakarta.validation.Valid;
@@ -15,10 +14,16 @@ import org.springframework.web.bind.annotation.*;
 public class UserController {
     private final UserService userService;
 
-    @PostMapping
+    @PostMapping("/register")
     @ResponseStatus(HttpStatus.CREATED)
-    public UserResponse createUser(@Valid @RequestBody CreateUserRequest createUserRequest) {
-        return userService.createUser(createUserRequest);
+    public UserResponse registerUser(@Valid @RequestBody RegisterUserRequest registerUserRequest) {
+        return userService.registerUser(registerUserRequest);
+    }
+
+    @GetMapping("/{id}")
+    @ResponseStatus(HttpStatus.OK)
+    public UserResponse findUserById(@PathVariable Long id) {
+        return userService.findUserById(id);
     }
 
 }
