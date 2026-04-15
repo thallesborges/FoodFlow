@@ -1,6 +1,12 @@
 name: CI
 
 on:
+  push:
+    branches:
+    - feature/**
+    - feat/**
+    - fix/**
+    - chore/**
   pull_request:
     branches:
       - main
