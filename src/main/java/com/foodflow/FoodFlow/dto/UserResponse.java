@@ -1,12 +1,19 @@
 package com.foodflow.FoodFlow.dto;
 
+import jakarta.validation.constraints.Email;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 import lombok.Builder;
 import lombok.Getter;
 
-@Getter
-@Builder
-public class UserResponse {
-    private Long id;
-    private String nome;
-    private String email;
-}
+public record UserResponse (
+        @NotNull
+        Long id,
+
+        @NotBlank
+        String nome,
+
+        @NotBlank
+        @Email
+        String email
+) {}
