@@ -3,12 +3,15 @@ package com.foodflow.FoodFlow.service;
 import com.foodflow.FoodFlow.database.entity.UserEntity;
 import com.foodflow.FoodFlow.database.repository.UserRepository;
 import com.foodflow.FoodFlow.dto.RegisterUserRequest;
+import com.foodflow.FoodFlow.dto.UserPatchRequest;
 import com.foodflow.FoodFlow.dto.UserResponse;
 import com.foodflow.FoodFlow.exception.EmailAlreadyExistsException;
 import com.foodflow.FoodFlow.exception.UserNotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+
+import java.util.List;
 
 @Service
 @RequiredArgsConstructor
@@ -47,5 +50,30 @@ public class UserService {
                 userEntity.getNome(),
                 userEntity.getEmail()
         );
+    }
+
+    public UserResponse updateUser(Long id, UserPatchRequest userPatchRequest) {
+        UserEntity userToUpdate = userRepository.findById(id)
+                .orElseThrow(() -> new UserNotFoundException("Usuário não encontrado"));
+
+        if (userPatchRequest.email() != null) userToUpdate.setEmail(userPatchRequest.email());
+        if (userPatchRequest.senha() != null) {
+            String senhaHash = passwordEncoder.encode(userPatchRequest.senha());
+            userToUpdate.setSenha(senhaHash);
+        }
+
+        userRepository.save(userToUpdate);
+
+        return new UserResponse(
+                userToUpdate.getId(),
+                userToUpdate.getNome(),
+                userToUpdate.getEmail()
+        );
+    }
+
+    public List<UserResponse> findAllUsers() {
+        return userRepository.findAll().stream()
+                .map(user -> new UserResponse(user.getId(), user.getNome(), user.getEmail()))
+                .toList();
     }
 }

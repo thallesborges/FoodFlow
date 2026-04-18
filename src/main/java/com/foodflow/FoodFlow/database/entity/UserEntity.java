@@ -25,4 +25,7 @@ public class UserEntity {
     @Column(nullable = false)
     private String senha;
 
+    public void save() {
+
+    }
 }
